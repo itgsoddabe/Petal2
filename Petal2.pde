@@ -1,23 +1,23 @@
 int width, height;  
 float degrees = 0.0;
-Flower flower;
+ArrayList<Flower> flowers;
 void setup() {
-    width = 600;
-    height = 600;
+    flowers = new ArrayList<Flower>();
+    width = 1280;
+    height = 800;
     size(width, height);
     noStroke();
     smooth();
     background(0);
-    flower = new Flower(width / 2.0, height / 2.0);  
+    flowers.add(new Flower(width / 2.0, height / 2.0));
+    flowers.add(new Flower(400, 200));  
 };
 
 void draw() {
-  if(degrees >= 360) { degrees = 0; }
   background(0);
-  translate(width / 2, height / 2);
-  rotate(radians(degrees));
-  flower.render();
-  degrees += 0.5;
+  for(Flower flower : flowers) {
+    flower.render();
+  }
 }
 
 class Flower {
@@ -27,6 +27,7 @@ class Flower {
   float radiusGrowth = 1.0049;
   float radius = 60;
   float rotation = 0.0;
+  float degrees = 0.0;
   Petal[] petals;
   
   Flower(float _x, float _y) {
@@ -41,9 +42,15 @@ class Flower {
   }
   
   void render() {
+    if(degrees >= 360) { degrees = 0; }
+    pushMatrix();
+    translate(x, y);
+    rotate(radians(degrees));
     for(Petal petal : petals) {
       petal.render();
     }
+    popMatrix();
+    degrees += 0.5;
   }
 
 }  
