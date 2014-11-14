@@ -9,50 +9,71 @@ void setup() {
     noStroke();
     smooth();
     background(0);
-    flowers.add(new Flower(width / 2.0, height / 2.0));
-    flowers.add(new Flower(400, 200));  
-};
+    frameRate(30);
+    for(int i = 0; i < 11; i++) {
+      flowers.add(new Flower(140 * i, height / 2.0));
+    }
+  };
 
 void draw() {
   background(0);
   for(Flower flower : flowers) {
-    flower.render();
+    flower.draw();
   }
 }
 
 class Flower {
   float x, y;
-  int totalPetals = 300;
+  int totalPetals = 30;
+  int size = 600;
   float angle = 137.5077640844293;
   float radiusGrowth = 1.0049;
   float radius = 60;
   float rotation = 0.0;
   float degrees = 0.0;
   Petal[] petals;
+  PGraphics image;
+    
   
   Flower(float _x, float _y) {
     x = _x;
     y = _y;
+    
     petals = new Petal[totalPetals];     
+    image = createGraphics(size, size);
     for (int i = 0; i < totalPetals; i++) {     
       rotation += angle;
       radius *= radiusGrowth;
       petals[i] = new Petal(this, i);
     }
+    render();
+  }
+ 
+  void render() {
+    
+    image.beginDraw();
+      image.smooth();
+      image.noStroke();
+      image.pushMatrix();
+        image.translate(size / 2 , size / 2);
+        //image.rotate(radians(degrees));
+        for(Petal petal : petals) {
+          petal.render();
+        }
+      image.popMatrix();
+    image.endDraw();
+    
   }
   
-  void render() {
+  void draw() {
     if(degrees >= 360) { degrees = 0; }
     pushMatrix();
-    translate(x, y);
-    rotate(radians(degrees));
-    for(Petal petal : petals) {
-      petal.render();
-    }
+      translate(x, y);
+      rotate(radians(degrees));
+      image(image, - size / 2, - size / 2);
     popMatrix();
     degrees += 0.5;
   }
-
 }  
   
 class Petal {
@@ -74,17 +95,17 @@ class Petal {
   }
   
   void render() {
-    pushMatrix();
-      translate(this.x, this.y);
-      fill(this.baseColor);
-      rotate(this.rotation);
-      scale(this.scaleVar, this.scaleVar);
-      rect(-10, -1, 20, 2);
-      ellipse(0, 0, 10, 10);
-      fill(this.detailColor);
-      ellipse(0, 0, 8, 8);
-      fill(this.trimColor);
-      ellipse(0, 0, 5, 5);
-    popMatrix();
+    flower.image.pushMatrix();
+      flower.image.translate(this.x, this.y);
+      flower.image.fill(this.baseColor);
+      flower.image.rotate(this.rotation);
+      flower.image.scale(this.scaleVar, this.scaleVar);
+      flower.image.rect(-10, -1, 20, 2);
+      flower.image.ellipse(0, 0, 10, 10);
+      flower.image.fill(this.detailColor);
+      flower.image.ellipse(0, 0, 8, 8);
+      flower.image.fill(this.trimColor);
+      flower.image.ellipse(0, 0, 5, 5);
+    flower.image.popMatrix();
   }
 }
