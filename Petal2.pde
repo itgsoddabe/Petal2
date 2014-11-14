@@ -14,15 +14,15 @@ void setup() {
 void draw() {
   if(degrees >= 360) { degrees = 0; }
   background(0);
-  //translate(width / 2, height / 2);
-  //rotate(radians(degrees));
+  translate(width / 2, height / 2);
+  rotate(radians(degrees));
   flower.render();
   degrees += 0.5;
 }
 
 class Flower {
   float x, y;
-  int totalPetals = 5;
+  int totalPetals = 300;
   float angle = 137.5077640844293;
   float radiusGrowth = 1.0049;
   float radius = 60;
@@ -60,9 +60,8 @@ class Petal {
   
   Petal(Flower _flower, int i) {
       flower = _flower;
-      //translate(flower.x, flower.y);
-      x = flower.x + cos(radians(flower.rotation)) * flower.radius;
-      y = flower.y + sin(radians(flower.rotation)) * flower.radius;
+      x = cos(radians(flower.rotation)) * flower.radius;
+      y = sin(radians(flower.rotation)) * flower.radius;
       rotation = radians(flower.rotation);
       scaleVar += (i * 2) / flower.totalPetals;
   }
